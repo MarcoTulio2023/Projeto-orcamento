@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Criar orçamento</title>
+  <style>
+    .success-message {
+        color: green;
+        display: none;
+    }
+
+    /* Reset básico */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        padding: 20px;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #4CAF50;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    input, select {
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #333;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    a:hover {
+        background-color: #555;
+    }
+
+    .success-message {
+        color: green;
+        margin-top: 20px;
+    }
+
+    footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #666;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="Container">
+    <h1>Cadastrar novo orçamento</h1>
+    <form id="fornecedorOrcamentoForm" th:action="@{/fornecedororcamento/salvar}" th:object="${orcamentoFornecedorModel}" method="post" onsubmit="submitForm(event)">
+      <label for="fornecedorId">ID do Fornecedor:</label>
+      <input type="number" id="fornecedorId" name="fornecedorId" required><br><br>
+
+      <label for="valorOrcamento">Valor do Orçamento:</label>
+      <input type="number" id="valorOrcamento" th:field="*{valorOrcamento}" step="0.01" required>
+
+      <label for="icmsEstados">Estado ICMS:</label>
+      <select id="icmsEstados" th:field="*{icmsEstados}">
+        <option value="ICMS_MG">MG</option>
+        <option value="ICMS_SP">SP</option>
+        <option value="ICMS_RJ">RJ</option>
+        <option value="ICMS_RS">RS</option>
+        <option value="ICMS_PR">PR</option>
+        <option value="ICMS_SC">SC</option>
+        <option value="ICMS_BA">BA</option>
+        <option value="ICMS_DF">DF</option>
+        <option value="ICMS_GO">GO</option>
+        <option value="ICMS_PA">PA</option>
+        <option value="ICMS_MT">MT</option>
+        <option value="ICMS_PE">PE</option>
+        <option value="ICMS_CE">CE</option>
+        <option value="ICMS_ES">ES</option>
+        <option value="ICMS_MS">MS</option>
+        <option value="ICMS_AM">AM</option>
+        <option value="ICMS_MA">MA</option>
+        <option value="ICMS_RN">RN</option>
+        <option value="ICMS_PB">PB</option>
+        <option value="ICMS_AL">AL</option>
+        <option value="ICMS_PI">PI</option>
+        <option value="ICMS_RO">RO</option>
+        <option value="ICMS_SE">SE</option>
+        <option value="ICMS_TO">TO</option>
+        <option value="ICMS_AC">AC</option>
+        <option value="ICMS_AP">AP</option>
+        <option value="ICMS_RR">RR</option>
+      </select><br><br>
+
+      <button id="salvarorcamento" type="submit">Salvar</button>
+    </form>
+  </div>
+<a th:href="@{/fornecedororcamento/sucesso}">Ver orçamentos Existentes</a>
+<a th:href="@{/fornecedor}" class="linkfornecedor">Retornar para Cadastro de Fornecedor</a>
+
+<script>
+  async function submitForm(event) {
+      event.preventDefault(); // Impede o comportamento padrão de recarregar a página
+
+      const form = event.target;
+      const formData = new FormData(form);
+
+      try {
+          const response = await fetch(form.action, {
+              method: form.method,
+              body: formData
+          });
+
+          if (response.ok) {
+              alert("Orçamento cadastrado com sucesso!"); // Mostra a mensagem de sucesso
+              form.reset(); // Limpa o formulário
+
+          } else {
+              alert("Erro ao salvar o orçamento");
+          }
+      } catch (error) {
+          alert("Erro ao salvar");
+      }
+  }
+
+  document.getElementById("fornecedorOrcamentoForm").addEventListener("submit", submitForm);
+</script>
+</body>
+</html>

@@ -32,11 +32,12 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.cadastrarUsuario(usuarioModel));
     }
 
-    @GetMapping("pesquisa")
+    @GetMapping("/pesquisa")
     public String listarUsuarios(Model model) {
         List<UsuarioModel> usuarios = usuarioService.buscarUsuario();
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("usuarioModel", new UsuarioModel());
         return "usuarioPage";
     }
+
 }

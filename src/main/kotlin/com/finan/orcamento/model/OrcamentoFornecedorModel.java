@@ -1,5 +1,6 @@
 package com.finan.orcamento.model;
 
+import com.finan.orcamento.model.enums.FornecedorModel;
 import com.finan.orcamento.model.enums.IcmsEstados;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,16 +14,16 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="orcamento")
-public class OrcamentoModel implements Serializable {
+@Table(name="orcamentofornecedor")
+public class OrcamentoFornecedorModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
-    private UsuarioModel usuario;
+    @JoinColumn(name = "fornecedor_id", nullable = false)
+    private FornecedorModel fornecedor;
 
     @Enumerated(EnumType.STRING)
     private IcmsEstados icmsEstados;

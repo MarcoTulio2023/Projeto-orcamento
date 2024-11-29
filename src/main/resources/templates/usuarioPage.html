@@ -2,40 +2,56 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <style>
-        body {
-            text-align:center
-        }
-    </style>
-    <title>usuario</title>
+    <link th:href="@{/css/stylesUsuario.css}" rel="stylesheet"/>
+    <title>Cadastro de Usuários</title>
 </head>
 <body>
-    <h1>Cadastro de usuários</h1>
-    <form id="usuarioForm" th:action="@{/usuarios}" th:object="${usuarioModel}" method="post">
-        <label>Nome do Usuário</label>
-        <input type="text" id="nomeProduto"  th:field="*{nomeUsuario}"><br>
-        <button id="salvarUsuario" type="submit">Salvar</button>
-    </form>
-    <h2>Usuários Cadastrados</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome do Usuário</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="usuario : ${usuarios}">
-            <td th:text="${usuario.id}"></td>
-            <td th:text="${usuario.nomeUsuario}"></td>
-        </tr>
-        </tbody>
-    </table>
-    <script>
-        document.getElementById("usuarioForm").addEventListener("submit", function(event) {
+<header>
+    <h1>Cadastro de Usuários</h1>
+</header>
+
+<main>
+    <section class="section-form">
+        <div class="form-container">
+            <h2>Preencha os dados</h2>
+            <form id="usuarioForm" th:action="@{/usuarios}" th:object="${usuarioModel}" method="post">
+                <label for="nomeProduto">Nome do Usuário:</label>
+                <input type="text" id="nomeProduto" th:field="*{nomeUsuario}" required />
+                <button id="salvarUsuario" type="submit">Salvar</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="section-lista">
+        <div class="lista-container">
+            <h2>Usuários Cadastrados</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome do Usuário</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.id}"></td>
+                    <td th:text="${usuario.nomeUsuario}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section-links">
+        <a th:href="@{/orcamento/novo}" class="btn-link">Criar Novo Orçamento</a>
+        <a th:href="@{/usuarios/pesquisa}" class="btn-link">Lista de Usuários</a>
+    </section>
+</main>
+
+<script>
+    document.getElementById("usuarioForm").addEventListener("submit", function(event) {
         event.preventDefault(); // Impede o envio padrão do formulário
 
         var form = event.target;
@@ -53,9 +69,9 @@
             }
         }).catch(error => {
             console.error("Erro ao salvar o usuário", error);
-            alert("Erro ao Salvar");
+            alert("Erro ao salvar");
         });
     });
-    </script>
+</script>
 </body>
 </html>

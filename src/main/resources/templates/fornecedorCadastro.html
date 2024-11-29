@@ -1,0 +1,224 @@
+<!Doctype html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cadastrar fornecedor</title>
+    <style>
+        /* Reset básico */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        text-align: left;
+        line-height: 1.6;
+        padding: 20px;
+    }
+
+    header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .section-form, .section-lista, {
+        margin-bottom: 30px;
+    }
+
+    .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="String"], select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    .section-lista {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .section-links {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .btn-link {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-link:hover {
+        background-color: #45a049;
+    }
+
+    </style>
+</head>
+<header>
+    Cadastrar novo fornecedor
+</header>
+<body>
+<main>
+    <section class="container">
+        <div class="form-container">
+            <h2>Preencha os dados</h2>
+            <form id="fornecedorForm" th:action="@{/fornecedor}" th:object="${fornecedorModel}" method="post">
+                <label for="RazaoSocial">Razão Social:</label>
+                <input type="text" id="RazaoSocial" th:field="*{razaosocial}" required />
+
+               <label for="NomeFantasia">Nome Fantasia:</label>
+                <input type="text" id="NomeFantasia" th:field="*{nome_fantasia}" required />
+
+                <label for="Cnpj">CNPJ:</label>
+                <input type="text" id="Cnpj" th:field="*{cnpj}" required />
+
+                <label for="InscricaoEstadual">Inscrição Estadual:</label>
+                <input type="text" id="InscricaoEstadual" th:field="*{inscricaoestadual}" required />
+
+                <label for="Estado">Estado:</label>
+                <select id="Estado" th:field="*{estado}" required>
+                    <option value="ICMS_MG">MG</option>
+                    <option value="ICMS_SP">SP</option>
+                    <option value="ICMS_RJ">RJ</option>
+                    <option value="ICMS_RS">RS</option>
+                    <option value="ICMS_PR">PR</option>
+                    <option value="ICMS_SC">SC</option>
+                    <option value="ICMS_BA">BA</option>
+                    <option value="ICMS_DF">DF</option>
+                    <option value="ICMS_GO">GO</option>
+                    <option value="ICMS_PA">PA</option>
+                    <option value="ICMS_MT">MT</option>
+                    <option value="ICMS_PE">PE</option>
+                    <option value="ICMS_CE">CE</option>
+                    <option value="ICMS_ES">ES</option>
+                    <option value="ICMS_MS">MS</option>
+                    <option value="ICMS_AM">AM</option>
+                    <option value="ICMS_MA">MA</option>
+                    <option value="ICMS_RN">RN</option>
+                    <option value="ICMS_PB">PB</option>
+                    <option value="ICMS_AL">AL</option>
+                    <option value="ICMS_PI">PI</option>
+                    <option value="ICMS_RO">RO</option>
+                    <option value="ICMS_SE">SE</option>
+                    <option value="ICMS_TO">TO</option>
+                    <option value="ICMS_AC">AC</option>
+                    <option value="ICMS_AP">AP</option>
+                    <option value="ICMS_RR">RR</option>
+                </select><br><br>
+
+                <button id="salvarForncedor" type="submit">Salvar</button>
+            </form>
+        </div>
+
+    <section class="section-links">
+        <a th:href="@{/fornecedororcamento/novo}" class="btn-link">Cadastrar um orçamento</a>
+        <a th:href="@{/fornecedor/sucesso}" class="btn-link">Lista de Fornecedores</a>
+    </section>
+</main>
+ <script>
+    async function submitForm(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("Fornecedor cadastrado!");
+                form.reset();
+            } else {
+                alert("Erro ao cadastrar fornecedor");
+            }
+        } catch (error) {
+            alert("Erro ao salvar");
+        }
+    }
+
+    document.getElementById("fornecedorForm").addEventListener("submit", submitForm);
+</script>
+</body>
+</html>

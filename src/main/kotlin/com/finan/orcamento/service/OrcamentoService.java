@@ -12,38 +12,47 @@ import java.util.Optional;
 
 @Service
 public class OrcamentoService {
+
     @Autowired
     private OrcamentoRepository orcamentoRepository;
 
     public List<OrcamentoModel> buscarCadastro(){
         return orcamentoRepository.findAll();
     }
+
     public OrcamentoModel buscaId(Long id){
-        Optional<OrcamentoModel>obj= orcamentoRepository.findById(id);
+        Optional<OrcamentoModel> obj = orcamentoRepository.findById(id);
         if (obj.isPresent()) {
             return obj.get();
         } else {
             throw new RuntimeException("Orçamento não encontrado");
         }
     }
-    public OrcamentoModel cadastrarOrcamento(OrcamentoModel orcamentoModel){
-        //calcula ICMS
-        //calculoICMS(orcamentoModel)
+
+    public OrcamentoModel cadastrarOrcamento(OrcamentoModel orcamentoModel) {
+        if (orcamentoModel.getValorOrcamento() == null) {
+            throw new IllegalArgumentException("O valor do orçamento não pode ser nulo.");
+        }
+        if (orcamentoModel.getIcmsEstados() == null) {
+            throw new IllegalArgumentException("O estado do ICMS não pode ser nulo.");
+        }
         orcamentoModel.calcularIcms();
+
         return orcamentoRepository.save(orcamentoModel);
     }
 
-    public OrcamentoModel atualizaCadastro(OrcamentoModel orcamentoModel, Long id){
+    public OrcamentoModel atualizaCadastro(OrcamentoModel orcamentoModel, Long id) {
         OrcamentoModel newOrcamentoModel = buscaId(id);
-        //calcula ICMS
-        //calculoICMS(orcamentoModel);
-       newOrcamentoModel.setValorOrcamento(orcamentoModel.getValorOrcamento());
-       newOrcamentoModel.setValorICMS(orcamentoModel.getValorICMS());
+        newOrcamentoModel.setValorOrcamento(orcamentoModel.getValorOrcamento());
+        newOrcamentoModel.setValorICMS(orcamentoModel.getValorICMS());
         return orcamentoRepository.save(newOrcamentoModel);
     }
-    public void deletaOrcamento(Long id){
+
+    public void deletaOrcamento(Long id) {
         orcamentoRepository.deleteById(id);
     }
+}
+
 
     //funções
     //Função calcula ICMS
@@ -61,4 +70,3 @@ public class OrcamentoService {
             orcamentoModel.setValorICMS(valorOrcamento.multiply(icmsRJ));
         }
     }*/
-}

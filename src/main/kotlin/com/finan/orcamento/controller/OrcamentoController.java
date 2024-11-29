@@ -1,43 +1,50 @@
 package com.finan.orcamento.controller;
 
 import com.finan.orcamento.model.OrcamentoModel;
-import com.finan.orcamento.repositories.OrcamentoRepository;
+import com.finan.orcamento.model.UsuarioModel;
+import com.finan.orcamento.repositories.UsuarioRepository;
 import com.finan.orcamento.service.OrcamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping(path="/orcamentos")
+@Controller
+@RequestMapping("/orcamento")
 public class OrcamentoController {
+
     @Autowired
     private OrcamentoService orcamentoService;
-    @Autowired
-    private OrcamentoRepository orcamentoRepository;
 
-    @GetMapping
-    public ResponseEntity<List<OrcamentoModel>>buscaTodosOrcamentos(){
-        return ResponseEntity.ok(orcamentoService.buscarCadastro());
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @GetMapping("/novo")
+    public String novoOrcamentoForm(Model model) {
+        List<UsuarioModel> usuarios = usuarioRepository.findAll(); // Carrega os usuários cadastrados
+        OrcamentoModel orcamentoModel = new OrcamentoModel();
+        model.addAttribute("orcamentoModel", orcamentoModel);
+        model.addAttribute("usuarios", usuarios); // Passa a lista de usuários para o formulário
+        return "orcamentoForm";
     }
-    @GetMapping(path="/pesquisaid/{id}")
-    public ResponseEntity<OrcamentoModel>buscaPorId(@PathVariable Long id){
-        return ResponseEntity.ok().body(orcamentoService.buscaId(id));
+
+    @PostMapping("/salvar")
+    public String salvarOrcamento(@ModelAttribute OrcamentoModel orcamentoModel, @RequestParam("usuarioId") Long usuarioId, Model model) {
+        UsuarioModel usuario = usuarioRepository.findById(usuarioId).orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+        orcamentoModel.setUsuario(usuario); // Associa o usuário ao orçamento
+        OrcamentoModel novoOrcamento = orcamentoService.cadastrarOrcamento(orcamentoModel);
+        List<OrcamentoModel> orcamentos = orcamentoService.buscarCadastro();
+        model.addAttribute("orcamentos", orcamentos);
+
+        return "orcamentoSucesso";
     }
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<OrcamentoModel>cadastraOrcamento(@RequestBody OrcamentoModel orcamentoModel){
-        return ResponseEntity.ok(orcamentoService.cadastrarOrcamento(orcamentoModel));
-    }
-    @PostMapping(path="/put/{id}")
-    public ResponseEntity<OrcamentoModel>atualizaOrcamento(@RequestBody OrcamentoModel orcamentoModel, @PathVariable Long id){
-        OrcamentoModel orcamentoNewObj= orcamentoService.atualizaCadastro(orcamentoModel, id);
-        return ResponseEntity.ok().body(orcamentoNewObj);
-    }
-    @DeleteMapping(path="/delete/{id}")
-    public void deleteOrcamento(@PathVariable Long id){
-        orcamentoService.deletaOrcamento(id);
+
+    @GetMapping("/sucesso")
+    public String orcamentoSucesso(Model model) {
+        List<OrcamentoModel> orcamentos = orcamentoService.buscarCadastro();
+        model.addAttribute("orcamentos", orcamentos);
+        return "orcamentoSucesso";
     }
 }
